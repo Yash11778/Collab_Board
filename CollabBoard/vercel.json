@@ -1,6 +1,4 @@
 {
-  "buildCommand": "cd hackathon && npm install && npm run build",
-  "outputDirectory": "hackathon/dist",
   "rewrites": [
     {
       "source": "/(.*)",
