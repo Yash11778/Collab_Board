@@ -16,9 +16,11 @@ function BackendTest() {
           hasEnvVar: !!import.meta.env.VITE_SERVER_URL
         });
 
-        const response = await axios.get('/api/test');
+        // Use full URL instead of relative path
+        const response = await axios.get(`${apiUrl}/api/test`);
         if (response.data.message === 'API is working') {
           setStatus('✅ Backend Connected!');
+          setDetails(prev => ({ ...prev, success: true }));
         } else {
           setStatus('⚠️ Backend responded but with unexpected data');
         }
@@ -27,7 +29,8 @@ function BackendTest() {
         setDetails(prev => ({
           ...prev,
           error: error.message,
-          errorDetails: error.response?.data || 'No response from server'
+          errorDetails: error.response?.data || 'No response from server',
+          fullUrl: `${import.meta.env.VITE_SERVER_URL || 'http://localhost:5000'}/api/test`
         }));
       }
     };
