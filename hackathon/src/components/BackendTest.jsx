@@ -8,16 +8,22 @@ function BackendTest() {
   useEffect(() => {
     const checkBackend = async () => {
       try {
-        const apiUrl = import.meta.env.VITE_SERVER_URL || 'http://localhost:5000';
+        // Use same domain in production, localhost in dev
+        const apiUrl = import.meta.env.VITE_SERVER_URL || (import.meta.env.PROD ? '' : 'http://localhost:5000');
         setDetails({
-          configuredUrl: apiUrl,
+          configuredUrl: apiUrl || 'Same domain',
           isDev: !import.meta.env.PROD,
           isProd: import.meta.env.PROD,
-          hasEnvVar: !!import.meta.env.VITE_SERVER_URL
+          hasEnvVar: !!import.meta.env.VITE_SERVER_URL,
+          sameDomain: import.meta.env.PROD && !import.meta.env.VITE_SERVER_URL
         });
 
-        // Use full URL instead of relative path
-        const response = await axios.get(`${apiUrl}/api/test`);
+        // Use relative path in production (same domain)
+        const testUrl = import.meta.env.PROD && !import.meta.env.VITE_SERVER_URL 
+          ? '/api/test' 
+          : `${apiUrl}/api/test`;
+        
+        const response = await axios.get(testUrl);
         if (response.data.message === 'API is working') {
           setStatus('✅ Backend Connected!');
           setDetails(prev => ({ ...prev, success: true }));
@@ -30,7 +36,7 @@ function BackendTest() {
           ...prev,
           error: error.message,
           errorDetails: error.response?.data || 'No response from server',
-          fullUrl: `${import.meta.env.VITE_SERVER_URL || 'http://localhost:5000'}/api/test`
+          fullUrl: import.meta.env.PROD ? '/api/test' : `${import.meta.env.VITE_SERVER_URL || 'http://localhost:5000'}/api/test`
         }));
       }
     };
