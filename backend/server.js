@@ -20,12 +20,15 @@ if (useInMemory) {
 const app = express();
 
 // Enhanced CORS setup to ensure frontend can connect
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:5174',
+  'https://collab-board-updated-c4cb.vercel.app',
+  process.env.FRONTEND_URL
+].filter(Boolean);
+
 app.use(cors({
-  origin: [
-    'http://localhost:5173',
-    'http://localhost:5174',
-    'https://collab-board-updated-c4cb.vercel.app'
-  ],
+  origin: allowedOrigins,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   credentials: true
 }));
@@ -46,11 +49,7 @@ app.use((req, res, next) => {
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: [
-      'http://localhost:5173',
-      'http://localhost:5174',
-      'https://collab-board-updated-c4cb.vercel.app'
-    ],
+    origin: allowedOrigins,
     methods: ['GET', 'POST'],
     credentials: true
   },
