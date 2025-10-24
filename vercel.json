@@ -7,17 +7,20 @@
       "config": {
         "distDir": "hackathon/dist"
       }
+    },
+    {
+      "src": "backend/api/index.js",
+      "use": "@vercel/node"
     }
   ],
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "https://your-backend-deployment.vercel.app/api/$1"
+      "dest": "/backend/api/index.js"
     },
     {
       "src": "/(.*)",
-      "dest": "/hackathon/$1"
+      "dest": "/hackathon/dist/$1"
     }
-  ],
-  "outputDirectory": "hackathon/dist"
+  ]
 }

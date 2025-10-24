@@ -13,16 +13,18 @@ const app = express();
 const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:5174',
-  'https://collab-board-updated-c4cb.vercel.app',
   process.env.FRONTEND_URL,
-  '*' // Allow all origins for testing - remove in production
+  process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null
 ].filter(Boolean);
 
-app.use(cors({
-  origin: allowedOrigins,
+// Allow all origins in production for same-domain deployment
+const corsOptions = {
+  origin: process.env.NODE_ENV === 'production' ? true : allowedOrigins,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   credentials: true
-}));
+};
+
+app.use(cors(corsOptions));
 
 // Middleware for parsing JSON
 app.use(express.json());
