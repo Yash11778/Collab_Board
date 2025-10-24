@@ -143,5 +143,14 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Export for Vercel serverless
-module.exports = app;
+// Handle all routes for Vercel
+app.all('*', (req, res, next) => {
+  if (!res.headersSent) {
+    next();
+  }
+});
+
+// Export handler for Vercel serverless
+module.exports = (req, res) => {
+  return app(req, res);
+};
