@@ -1,13 +1,8 @@
 {
   "version": 2,
+  "buildCommand": "cd hackathon && npm install && npm run build",
+  "outputDirectory": "hackathon/dist",
   "builds": [
-    {
-      "src": "hackathon/package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "hackathon/dist"
-      }
-    },
     {
       "src": "backend/api/index.js",
       "use": "@vercel/node"
@@ -21,6 +16,12 @@
     {
       "src": "/(.*)",
       "dest": "/hackathon/dist/$1"
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
