@@ -1,7 +1,7 @@
 {
-  "buildCommand": "cd hackathon && npm ci && npm run build",
+  "buildCommand": "cd hackathon && npm install && npm run build",
   "outputDirectory": "hackathon/dist",
-  "installCommand": "npm ci --include=dev",
+  "installCommand": "npm install",
   "framework": null,
   "rewrites": [
     {
