@@ -30,21 +30,32 @@ app.use((req, res, next) => {
 let isConnected = false;
 
 const connectDB = async () => {
-  if (isConnected) {
+  if (isConnected && mongoose.connection.readyState === 1) {
+    console.log('Using existing MongoDB connection');
     return;
   }
 
   try {
     const mongoURI = process.env.MONGODB_URI;
     if (!mongoURI) {
+      console.error('MONGODB_URI is not defined in environment variables');
       throw new Error('MONGODB_URI is not defined');
     }
 
-    await mongoose.connect(mongoURI);
+    console.log('Connecting to MongoDB...');
+    
+    await mongoose.connect(mongoURI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      serverSelectionTimeoutMS: 5000,
+      socketTimeoutMS: 45000,
+    });
+    
     isConnected = true;
-    console.log('Connected to MongoDB');
+    console.log('✅ Connected to MongoDB successfully');
   } catch (err) {
-    console.error('MongoDB connection error:', err);
+    console.error('❌ MongoDB connection error:', err.message);
+    isConnected = false;
     throw err;
   }
 };
@@ -56,6 +67,21 @@ const User = require('../backend/models/userModel');
 
 // Import routes
 const userRoutes = require('../backend/routes/userRoutes');
+
+// Middleware to ensure DB connection
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (error) {
+    console.error('Database connection failed:', error);
+    res.status(503).json({ 
+      error: 'Database connection failed',
+      message: 'Please check MongoDB connection string and network access',
+      details: error.message 
+    });
+  }
+});
 
 // API routes
 app.use('/api/users', userRoutes);
