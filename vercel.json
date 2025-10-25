@@ -1,6 +1,7 @@
 {
   "version": 2,
-  "buildCommand": "cd hackathon && npm install && npm run build",
+  "buildCommand": "npm install && cd hackathon && npm install && npm run build",
+  "installCommand": "npm install && cd hackathon && npm install",
   "outputDirectory": "hackathon/dist",
   "rewrites": [
     {
