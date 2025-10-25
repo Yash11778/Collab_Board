@@ -90,8 +90,27 @@ app.get('/api/test', (req, res) => {
   res.json({ 
     message: 'API is working',
     timestamp: new Date().toISOString(),
-    env: process.env.NODE_ENV 
+    env: process.env.NODE_ENV,
+    hasMongoURI: !!process.env.MONGODB_URI,
+    mongoURIpreview: process.env.MONGODB_URI ? process.env.MONGODB_URI.substring(0, 20) + '...' : 'NOT SET'
   });
+});
+
+app.get('/api/db-test', async (req, res) => {
+  try {
+    await connectDB();
+    res.json({ 
+      message: 'Database connected successfully',
+      dbState: mongoose.connection.readyState,
+      dbName: mongoose.connection.name
+    });
+  } catch (error) {
+    res.status(500).json({ 
+      error: 'Database connection failed',
+      message: error.message,
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+    });
+  }
 });
 
 app.get('/api/boards', async (req, res) => {
