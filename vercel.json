@@ -1,16 +1,5 @@
 {
-  "buildCommand": "cd hackathon && npm install && npm run build",
-  "outputDirectory": "hackathon/dist",
-  "installCommand": "npm install",
-  "framework": null,
-  "rewrites": [
-    {
-      "source": "/api/:path*",
-      "destination": "/api"
-    },
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
-  ]
+  "github": {
+    "silent": true
+  }
 }
