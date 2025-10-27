@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "install-all": "npm install --prefix backend && npm install --prefix hackathon",
-    "build": "npm run build",
+    "build": "cd hackathon && npm install && npm run build",
     "start": "node backend/server.js"
   },
   "engines": {
