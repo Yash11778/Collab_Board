@@ -1,4 +1,18 @@
 {
+  "version": 2,
+  "buildCommand": "npm run build",
+  "outputDirectory": "hackathon/dist",
+  "installCommand": "npm install",
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/hackathon/dist/index.html"
+    }
+  ],
   "github": {
     "silent": true
   }
